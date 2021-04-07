@@ -3,8 +3,8 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-x = 5
-print(x)
+
+
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hello, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -14,6 +14,6 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
 
-    print("this is a test")
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
