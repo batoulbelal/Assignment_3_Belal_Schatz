@@ -1,17 +1,24 @@
 # This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
+# Press Umschalt+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-import numpy
+
+#https://www.youtube.com/watch?v=4b5d3muPQmA
+# this video helpen in understanding
+
 import csv
+import numpy
 import random
 import string
 
 
+
+
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
-    print(f'Hello, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    print(f'Hi, {name}')  # Press Strg+F8 to toggle the breakpoint.
+
 
 def readFromCSVfile():
 #comment: from https://www.youtube.com/watch?v=efSjcrp87OY
@@ -44,6 +51,7 @@ def readFromCSVfile():
             count +=1;
 
     return bufferedList;
+
 
 def splitInputFromCSVFile(numberOfRow):
 # split strings taken from https://www.w3schools.com/python/ref_string_split.asp
@@ -86,6 +94,7 @@ def createArrayOfInputValues(numberOfColumnsFromInputData, numberOfRowsFromInput
 
     return bufferedArray;
 
+
 def manhattanDistance(A, B):
 #comment: from https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cityblock.html
 #comment: taken from https://www.geeksforgeeks.org/python-calculate-city-block-distance/
@@ -98,6 +107,8 @@ def manhattanDistance(A, B):
 
     result = numpy.sum([abs(a - b) for (a, b) in zip(A, B)])
     return result
+
+
 
 def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberOfColumnsFromInputData, arrayDataPointsFromCSVFile):
 # ----------------------------------------------------
@@ -165,7 +176,6 @@ def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberO
             matrixClusterInformation[row,1]= random.uniform(minimumValueX,maximumValueX)
 
     if int(numberOfColumnsFromInputData) == 2:
-        print("hüpft er rein?")
         for row in range (0,int(numberOfClusters)):
             matrixClusterInformation[row,1]= random.uniform(minimumValueX,maximumValueX)
         for row in range (0,int(numberOfClusters)):
@@ -179,7 +189,9 @@ def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberO
         for row in range(0, int(numberOfClusters)):
             matrixClusterInformation[row, 3] = random.uniform(minimumValueZ, maximumValueZ)
 
-    #print(matrixClusterInformation)
+#comment: up until this point in time, the centroids are fixed for the beginning
+
+
 
 #comment: the vectorManhattanDistance array contains 1/2/3 (depending on dimensions) columns where the distance from each
 #comment: data point / line from CSV file (=row) is calculated for every cluster centroid (=column)
@@ -187,7 +199,9 @@ def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberO
 # [element1DistanceToCentroidCluster1] [element1DistanceToCentroidCluster2] [element1DistanceToCentroidCluster3]
 # [element2DistanceToCentroidCluster1] [element2DistanceToCentroidCluster2] [element2DistanceToCentroidCluster3]
 # and so on
+
     vectorManhattanDistance = numpy.zeros((int(numberOfRowsFromInputData),int(numberOfClusters)), dtype='float')
+
 
 #comments: the following loops calculate the distance with the manhattanDistance-Function
     for counterVariable in range (0,int(numberOfRowsFromInputData)):
@@ -198,13 +212,19 @@ def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberO
 
         vectorManhattanDistance[counterVariable,0]=manhattanDistance(arrayDataPointsFromCSVFile[counterVariable], matrixClusterInformation[0, 1:3])
 
+    bufferedMatrixDataItemBelongsToWhichClustermatrixDataItemBelongsToWhichCluster= numpy.zeros((int(numberOfRowsFromInputData),1),dtype='float')
+
+    #xxx hier müsste die for schleife beginnen
+    for iterations in range (0,5000):
+        print("start runn")
 #comment: loop for cluster 2
-    for counterVariable in range(0, int(numberOfRowsFromInputData)):
-        vectorManhattanDistance[counterVariable, 1] = manhattanDistance(arrayDataPointsFromCSVFile[counterVariable], matrixClusterInformation[1, 1:3])
+        for counterVariable in range(0, int(numberOfRowsFromInputData)):
+            vectorManhattanDistance[counterVariable, 1] = manhattanDistance(arrayDataPointsFromCSVFile[counterVariable], matrixClusterInformation[1, 1:3])
 
 #comment: loop for cluster 3
-    for counterVariable in range(0, int(numberOfRowsFromInputData)):
-        vectorManhattanDistance[counterVariable, 2] = manhattanDistance(arrayDataPointsFromCSVFile[counterVariable], matrixClusterInformation[2, 1:3])
+        for counterVariable in range(0, int(numberOfRowsFromInputData)):
+            vectorManhattanDistance[counterVariable, 2] = manhattanDistance(arrayDataPointsFromCSVFile[counterVariable], matrixClusterInformation[2, 1:3])
+
 
 
 #comment: matrixDataItemBelongsToWhichCluster contains the information which item / line of CSV belongs to which cluster
@@ -213,9 +233,10 @@ def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberO
 #[ClusterElement2] = 2
 #[ClusterElement3] =1
 # and so on
-    matrixDataItemBelongsToWhichCluster= numpy.zeros((int(numberOfRowsFromInputData),1),dtype='float')
+        matrixDataItemBelongsToWhichCluster= numpy.zeros((int(numberOfRowsFromInputData),1),dtype='float')
 
-    for rowCounter in range (0,int(numberOfRowsFromInputData)):
+
+        for rowCounter in range (0,int(numberOfRowsFromInputData)):
         #print(vectorManhattanDistance[rowCounter, 0])
         #print(vectorManhattanDistance[rowCounter, 1])
         #print(vectorManhattanDistance[rowCounter, 2])
@@ -226,16 +247,104 @@ def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberO
 #comment: if [manhDistanceCluster 1 < manhDistanceCluster 2] & [manhDistanceCluster 1 < manhDistanceCluster 3] then it belongs to cluster 1
 #comment: the element belongs to the cluster where the manhattan distance is the smallest value
 
-        if (vectorManhattanDistance[rowCounter,0] < vectorManhattanDistance[rowCounter,1]) & (vectorManhattanDistance [rowCounter,0] < vectorManhattanDistance[rowCounter,2]):
-            matrixDataItemBelongsToWhichCluster[rowCounter,0] = 1;
+            if (vectorManhattanDistance[rowCounter,0] < vectorManhattanDistance[rowCounter,1]) & (vectorManhattanDistance [rowCounter,0] < vectorManhattanDistance[rowCounter,2]):
+                matrixDataItemBelongsToWhichCluster[rowCounter,0] = 1;
 
-        if (vectorManhattanDistance[rowCounter,1] < vectorManhattanDistance[rowCounter,0]) & (vectorManhattanDistance[rowCounter,1]<vectorManhattanDistance[rowCounter,2]):
-            matrixDataItemBelongsToWhichCluster[rowCounter,0] = 2;
+            if (vectorManhattanDistance[rowCounter,1] < vectorManhattanDistance[rowCounter,0]) & (vectorManhattanDistance[rowCounter,1]<vectorManhattanDistance[rowCounter,2]):
+                matrixDataItemBelongsToWhichCluster[rowCounter,0] = 2;
 
-        if (vectorManhattanDistance[rowCounter,2] < vectorManhattanDistance[rowCounter,0]) & (vectorManhattanDistance[rowCounter,2]<vectorManhattanDistance[rowCounter,1]):
-            matrixDataItemBelongsToWhichCluster[rowCounter,0] = 3;
+            if (vectorManhattanDistance[rowCounter,2] < vectorManhattanDistance[rowCounter,0]) & (vectorManhattanDistance[rowCounter,2]<vectorManhattanDistance[rowCounter,1]):
+                matrixDataItemBelongsToWhichCluster[rowCounter,0] = 3;
 
-# Press the green button in the gutter to run the script.
+
+        listXValuesClusterOne = []
+        listYValuesClusterOne = []
+        listZValuesClusterOne = []
+
+        listXValuesClusterTwo = []
+        listYValuesClusterTwo = []
+        listZValuesClusterTwo = []
+
+        listXValuesClusterThree = []
+        listYValuesClusterThree = []
+        listZValuesClusterThree = []
+
+        #print("XXX")
+        #print(arrayDataPointsFromCSVFile)
+
+#comment: this loop goes through every line to extraxt where which line item belongs to (in which cluster)
+#comment:depending on which cluster it belongs to, the element is added into the specified list to later on average it
+        for currentRowToCheckCluster in range (0,int(numberOfRowsFromInputData)):
+
+            if matrixDataItemBelongsToWhichCluster[currentRowToCheckCluster] == 1:
+                listXValuesClusterOne.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][0])
+                listYValuesClusterOne.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][1])
+                #listZValuesClusterOne.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][2])
+
+            if matrixDataItemBelongsToWhichCluster[currentRowToCheckCluster] == 2:
+                listXValuesClusterTwo.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][0])
+                listYValuesClusterTwo.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][1])
+                # listZValuesClusterTwo.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][2])
+
+            if matrixDataItemBelongsToWhichCluster[currentRowToCheckCluster] == 3:
+                listXValuesClusterThree.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][0])
+                listYValuesClusterThree.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][1])
+                # listZValuesClusterThree.append(copiedArrayContainingDotsDataFromFile[currentRowToCheckCluster][2])
+
+#comment: this section is implemented to calculate the means of the extracted data according to the cluster
+        xMeanClusterOne = sum(listXValuesClusterOne)/len(listXValuesClusterOne)
+        yMeanClusterOne = sum(listYValuesClusterOne)/len(listYValuesClusterOne)
+        #zMeanClusterOne = sum(listZValuesClusterOne)/len(listZValuesClusterOne)
+
+        xMeanClusterTwo = sum(listXValuesClusterTwo)/len(listXValuesClusterTwo)
+        yMeanClusterTwo = sum(listYValuesClusterTwo)/len(listYValuesClusterTwo)
+        #zMeanClusterTwo = sum(listZValuesClusterTwo)/len(listZValuesClusterTwo)
+
+        xMeanClusterThree = sum(listXValuesClusterThree)/len(listXValuesClusterThree)
+        yMeanClusterThree = sum(listYValuesClusterThree)/len(listYValuesClusterThree)
+        #zMeanClusterThree = sum(listZValuesClusterThree)/len(listZValuesClusterThree)
+
+
+
+        #print("before")
+        #print(matrixClusterInformation)
+
+        matrixClusterInformation[0][1] = xMeanClusterOne;
+        matrixClusterInformation[0][2] = yMeanClusterOne;
+        matrixClusterInformation[1][1] = xMeanClusterTwo
+        matrixClusterInformation[1][2] = yMeanClusterTwo
+        matrixClusterInformation[2][1] = xMeanClusterThree
+        matrixClusterInformation[2][2] = yMeanClusterThree
+        #print("after")
+        #print(matrixClusterInformation)
+        print("CLuster Informartion")
+        print(matrixDataItemBelongsToWhichCluster)
+        print("buffered one")
+        print(bufferedMatrixDataItemBelongsToWhichClustermatrixDataItemBelongsToWhichCluster)
+
+        #print(bufferedMatrixDataItemBelongsToWhichClustermatrixDataItemBelongsToWhichCluster.all() == matrixDataItemBelongsToWhichCluster.all())
+
+        checkVariableForComparison = False;
+        for c in range(0,int(numberOfRowsFromInputData)):
+            if matrixDataItemBelongsToWhichCluster[c] == bufferedMatrixDataItemBelongsToWhichClustermatrixDataItemBelongsToWhichCluster[c]:
+                checkVariableForComparison = True;
+            else:
+                checkVariableForComparison = False;
+                print("XXX")
+                print(iterations)
+
+                break;
+
+        if checkVariableForComparison == True:
+            break;
+        bufferedMatrixDataItemBelongsToWhichClustermatrixDataItemBelongsToWhichCluster = matrixDataItemBelongsToWhichCluster.copy()
+
+    return matrixClusterInformation, iterations, matrixDataItemBelongsToWhichCluster, copiedArrayContainingDotsDataFromFile
+
+
+#xxx hier würde sie aufhören
+
+
 if __name__ == '__main__':
     print_hi('PyCharm')
 
@@ -243,39 +352,81 @@ if __name__ == '__main__':
     dataFromCSVFile = readFromCSVfile();
 
     print("- Split first line -")
-    # comment: this code line splits the first read in line to extract the number of clusters
-    bufferedSplitText = splitInputFromCSVFile(0);  # von row index 0
+#comment: this code line splits the first read in line to extract the number of clusters
+    bufferedSplitText = splitInputFromCSVFile(0); # von row index 0
     print(bufferedSplitText)
 
-    # comment: this line occurs to be '['[', 'ï»¿3', ', ', '', ']']' -> to get rid of the symbols
-    # comment: therefore the 4th element (index 3) of the whole secodn element (index 1) of the list is chosen (=workaround)
-    numberOfClusters = bufferedSplitText[1][3]
-    # print("CLUSTERS")
-    # print(numberOfClusters)
 
-    # comment: the next block takes the second line of the CSV file and extracts the number of rows from the second line (index 1)
+#comment: this line occurs to be '['[', 'ï»¿3', ', ', '', ']']' -> to get rid of the symbols
+#comment: therefore the 4th element (index 3) of the whole secodn element (index 1) of the list is chosen (=workaround)
+    numberOfClusters = bufferedSplitText[1][3]
+    #print("CLUSTERS")
+    #print(numberOfClusters)
+
+#comment: the next block takes the second line of the CSV file and extracts the number of rows from the second line (index 1)
     bufferedSplitText = splitInputFromCSVFile(1);
-    # comment: the bufferedSplitText[1] has the index 1 because the element [0] equals '['
+#comment: the bufferedSplitText[1] has the index 1 because the element [0] equals '['
     numberOfRows = bufferedSplitText[1]
     print("- Number of ROWS -")
     print(numberOfRows)
 
-    # comment: the next block extracts the number of Columns / dimensions from the second line of the CSV file (index 1)
+#comment: the next block extracts the number of Columns / dimensions from the second line of the CSV file (index 1)
     bufferedSplitText = splitInputFromCSVFile(1);
-    # comment: the index must be 3 because [0]='[', [1]='(rows)', [2]=',' [3]='(columns)'
+#comment: the index must be 3 because [0]='[', [1]='(rows)', [2]=',' [3]='(columns)'
     numberOfDimensions = bufferedSplitText[3];
-    # print(numberOfDimensions)
+    #print(numberOfDimensions)
 
-    # comment: the array matrixContainingDataFromCSVFile includes ONLY the data points from the CSV file
-    # comment: the first 2 lines of the CSV file which contain inf. about cluster / rows / etc are not part of this array
-    # comment: parsing to int is necessary because it reads in a string and since dimensions and rows can just be whole numbers, int is feasible to be used
-    matrixContainingDataFromCSVFile = createArrayOfInputValues(int(numberOfDimensions), int(numberOfRows)).copy();
-    # comment: copying the array with .copy() is necessary because otherwise it does not work and the array is left with zeros
+
+#comment: the array matrixContainingDataFromCSVFile includes ONLY the data points from the CSV file
+#comment: the first 2 lines of the CSV file which contain inf. about cluster / rows / etc are not part of this array
+#comment: parsing to int is necessary because it reads in a string and since dimensions and rows can just be whole numbers, int is feasible to be used
+    matrixContainingDataFromCSVFile = createArrayOfInputValues(int(numberOfDimensions),int(numberOfRows)).copy();
+#comment: copying the array with .copy() is necessary because otherwise it does not work and the array is left with zeros
 
     print('- DATA FROM THE CSV FILE -')
     print(matrixContainingDataFromCSVFile)
 
+
     kMeansClusteringProcess(numberOfClusters, numberOfRows, numberOfDimensions, matrixContainingDataFromCSVFile);
+
+    matrixClusterInformation, iterations, matrixDataItemBelongsToWhichCluster, copiedArrayContainingDotsDataFromFile = kMeansClusteringProcess(numberOfClusters, numberOfRows, numberOfDimensions, matrixContainingDataFromCSVFile);
+
+    with open('tt.csv', 'w', newline='') as f:
+        thewriter = csv.writer(f)
+
+        thewriter.writerow(numberOfClusters)
+        for counter in range (0,3):
+            listForOutput = []
+            listForOutput.append(matrixClusterInformation[counter][1])
+            listForOutput.append(matrixClusterInformation[counter][2])
+            thewriter.writerow(listForOutput)
+
+        listForOutput = []
+        listForOutput.append(iterations)
+        thewriter.writerow(listForOutput)
+        listForOutput = []
+        listForOutput.append(numberOfRows)
+        listForOutput.append(numberOfDimensions)
+        thewriter.writerow((listForOutput))
+
+        for counter in range (0,int(numberOfRows)):
+            listForOutput = []
+            listForOutput.append(matrixDataItemBelongsToWhichCluster[counter])
+            listForOutput.append(copiedArrayContainingDotsDataFromFile[counter][0])
+            listForOutput.append(copiedArrayContainingDotsDataFromFile[counter][1])
+            thewriter.writerow((listForOutput))
+
+
+
+
+
+
+
+
+
+
+
+
 
 # replace function from https://www.w3schools.com/python/ref_string_replace.asp
 
