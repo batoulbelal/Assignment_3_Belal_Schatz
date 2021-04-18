@@ -110,6 +110,7 @@ def manhattanDistance(A, B):
 
 
 
+
 def kMeansClusteringProcess(numberOfClusters, numberOfRowsFromInputData, numberOfColumnsFromInputData, arrayDataPointsFromCSVFile):
 # ----------------------------------------------------
 #comment: the function performs the whole clustering process including: allocation of 3 random centroids withih the range of (xmin,xmax; ymin,ymax; zmin,zmax)
@@ -411,7 +412,7 @@ if __name__ == '__main__':
 
         for counter in range (0,int(numberOfRows)):
             listForOutput = []
-            listForOutput.append(matrixDataItemBelongsToWhichCluster[counter])
+            listForOutput.append(int(matrixDataItemBelongsToWhichCluster[counter][0])) #comment: the [0] allows to extract ONLY the number from the element (the cluster number); to avoid having 2.0 or 3.0 (double or float) -> cast to INTEGER alleviates this
             listForOutput.append(copiedArrayContainingDotsDataFromFile[counter][0])
             listForOutput.append(copiedArrayContainingDotsDataFromFile[counter][1])
             thewriter.writerow((listForOutput))
